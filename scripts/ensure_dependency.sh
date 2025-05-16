@@ -3,13 +3,6 @@ set -eu
 
 echo "Ensuring is installed: ${DEPENDENCY_TERM}"
 
-rm --recursive --force scryer_libs/tmp-package
-
-relocate_tmp() {
-    rm --recursive --force "scryer_libs/packages/${DEPENDENCY_NAME}"
-    mv scryer_libs/tmp-package "scryer_libs/packages/${DEPENDENCY_NAME}"
-}
-
 case "${DEPENDENCY_KIND}" in
     git_default)
         git clone \
@@ -17,8 +10,7 @@ case "${DEPENDENCY_KIND}" in
             --depth 1 \
             --single-branch \
             "${GIT_URL}" \
-            scryer_libs/tmp-package
-        relocate_tmp
+            scryer_libs/packages/${DEPENDENCY_NAME}
         ;;
     git_branch)
         git clone \
@@ -27,8 +19,7 @@ case "${DEPENDENCY_KIND}" in
             --single-branch \
             --branch "${GIT_BRANCH}" \
             "${GIT_URL}" \
-            scryer_libs/tmp-package
-        relocate_tmp
+            scryer_libs/packages/${DEPENDENCY_NAME}
         ;;
     git_tag)
         git clone \
@@ -37,8 +28,7 @@ case "${DEPENDENCY_KIND}" in
             --single-branch \
             --branch "${GIT_TAG}" \
             "${GIT_URL}" \
-            scryer_libs/tmp-package
-        relocate_tmp
+            scryer_libs/packages/${DEPENDENCY_NAME}
         ;;
     git_hash)
         git clone \
@@ -46,16 +36,15 @@ case "${DEPENDENCY_KIND}" in
             --depth 1 \
             --single-branch \
             "${GIT_URL}" \
-            scryer_libs/tmp-package
-        git -C scryer_libs/tmp-package fetch \
+            scryer_libs/${DEPENDENCY_NAME}
+        git -C scryer_libs/packages/${DEPENDENCY_NAME} fetch \
             --quiet \
             --depth 1 \
             origin "${GIT_HASH}"
-        git -C scryer_libs/tmp-package switch \
+        git -C scryer_libs/packages/${DEPENDENCY_NAME} switch \
             --quiet \
             --detach \
             "${GIT_HASH}"
-        relocate_tmp
         ;;
     path)
         ln -rsf "${DEPENDENCY_PATH}" "scryer_libs/packages/${DEPENDENCY_NAME}"
