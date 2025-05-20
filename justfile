@@ -33,6 +33,8 @@ test: build test-example
 
 test-example:
     just example/test
+    just test/build
+    just test/test
 
 clean-codegen:
     rm -f pkg.pl.gen
