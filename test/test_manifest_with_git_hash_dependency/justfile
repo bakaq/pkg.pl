@@ -1,0 +1,26 @@
+test:
+    #!/bin/sh
+    echo "Testing the installation of a git branch dependency"
+    set -eu
+    rm -rf scryer_libs && rm -f manifest-lock.pl
+    scryer-prolog main.pl -g "catch(main, _, halt(1)) ."
+
+    exitCode=0
+
+    if [ ! -d "./scryer_libs/packages/test" ]; then
+        exitCode=1
+    fi
+
+    if [ ! -f "./scryer_libs/packages/test/scryer-manifest.pl" ]; then
+        exitCode=1
+    fi
+
+    dependencyGitHash=$(cd ./scryer_libs/packages/test && git rev-parse HEAD)
+
+    if [ "$dependencyGitHash" != "d19fefc1d7907f6675e181601bb9b8b94561b441" ]; then
+        exitCode=1
+    fi
+
+    rm -rf scryer_libs && rm -f manifest-lock.pl
+
+    exit ${exitCode}

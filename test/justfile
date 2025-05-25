@@ -1,0 +1,14 @@
+default:
+    @just --list
+
+build:
+    cd util_packages && scryer-prolog -f pkg.pl -g "catch(pkg_install(_), _, halt(1)), halt"
+
+test:
+    #!/bin/sh
+    set -eu
+    
+    for dir in test*/; do
+        (cd "$dir" && just test)
+    done
+    
