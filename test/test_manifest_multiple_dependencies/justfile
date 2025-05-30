@@ -1,0 +1,124 @@
+test:
+    #!/bin/sh
+    set -eu
+    
+    . ../util_packages/report_test.sh
+
+    printf "%s\n" "Testing installation of multiple dependencies"
+
+    rm -rf scryer_libs && rm -f manifest-lock.pl
+
+    scryer-prolog main.pl -g "catch(main, _, halt(1)) ."
+
+    exitCode=0
+
+    if [ ! -d "./scryer_libs/packages/test_branch" ]; then
+        exitCode=1
+        print_test_result "the package folder exist for the dependency test_branch" failure
+    else
+        print_test_result "the package folder exist for the dependency test_branch" success
+    fi
+
+    if [ ! -f "./scryer_libs/packages/test_branch/scryer-manifest.pl" ]; then
+        exitCode=1
+        print_test_result "the manifest of the dependency test_branch exist" failure
+    else
+        print_test_result "the manifest of the dependency test_branch exist" success
+    fi
+
+    dependencyBranch=$(cd ./scryer_libs/packages/test_branch && git rev-parse --abbrev-ref HEAD)
+
+    if [ "$dependencyBranch" != "branch" ]; then
+        exitCode=1
+        print_test_result "the dependency test_branch is at the correct git branch" failure
+    else
+        print_test_result "the dependency test_branch is at the correct git branch" success
+    fi
+
+    if [ ! -d "./scryer_libs/packages/test" ]; then
+        exitCode=1
+        print_test_result "the package folder exist for the dependency test" failure
+    else
+        print_test_result "the package folder exist for the dependencies test" success
+    fi
+
+    if [ ! -f "./scryer_libs/packages/test/scryer-manifest.pl" ]; then
+        exitCode=1
+        print_test_result "the manifest of the dependency test exist" failure
+    else
+        print_test_result "the manifest of the dependency test exist" success
+    fi
+
+    dependencyBranch=$(cd ./scryer_libs/packages/test && git rev-parse --abbrev-ref HEAD)
+
+    if [ "$dependencyBranch" != "main" ]; then
+        exitCode=1
+        print_test_result "the dependency test is at the correct git branch" failure
+    else
+        print_test_result "the dependency test is at the correct git branch" success
+    fi
+
+
+    if [ ! -d "./scryer_libs/packages/test_hash" ]; then
+        exitCode=1
+        print_test_result "the package folder exist for the dependency test_hash" failure
+    else
+        print_test_result "the package folder exist for the dependency test_hash" success
+    fi
+
+    if [ ! -f "./scryer_libs/packages/test_hash/scryer-manifest.pl" ]; then
+        exitCode=1
+        print_test_result "the manifest of the dependency test_hash exist" failure
+    else
+        print_test_result "the manifest of the dependency test_hash exist" success
+    fi
+
+    dependencyGitHash=$(cd ./scryer_libs/packages/test_hash && git rev-parse HEAD)
+
+    if [ "$dependencyGitHash" != "d19fefc1d7907f6675e181601bb9b8b94561b441" ]; then
+        exitCode=1
+        print_test_result "the dependency test_hash is at the correct git commit hash" failure
+    else
+        print_test_result "the dependency test_hash is at the correct git commit hash" success
+    fi
+
+
+    if [ ! -d "./scryer_libs/packages/test_tag" ]; then
+        exitCode=1
+        print_test_result "the package folder exist for the dependency test_tag" failure
+    else
+        print_test_result "the package folder exist for the dependency test_tag" success
+    fi
+
+    if [ ! -f "./scryer_libs/packages/test_tag/scryer-manifest.pl" ]; then
+        exitCode=1
+        print_test_result "the manifest of the dependency exist" failure
+    else
+        print_test_result "the manifest of the dependency exist" success
+    fi
+
+    dependencyTag=$(cd ./scryer_libs/packages/test_tag && git describe --exact-match --tags 2>/dev/null)
+
+    if [ "$dependencyTag" != "tag" ]; then
+        exitCode=1
+        print_test_result "the dependency test_tag is at the correct git tag" failure
+    else
+        print_test_result "the dependency test_tag is at the correct git tag" success
+    fi
+
+    if [ ! -d "./scryer_libs/packages/test_local" ]; then
+        exitCode=1
+        print_test_result "the package folder exist for the dependency test_local" failure
+    else
+        print_test_result "the package folder exist for the dependency test_local" success
+    fi
+
+    if [ ! -f "./scryer_libs/packages/test_local/scryer-manifest.pl" ]; then
+        exitCode=1
+        print_test_result "the manifest of the dependency test_local exist" failure
+    else
+        print_test_result "the manifest of the dependency test_local exist" success
+    fi
+    rm -rf scryer_libs && rm -f manifest-lock.pl
+
+    exit ${exitCode}

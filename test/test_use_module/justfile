@@ -1,0 +1,14 @@
+test:
+    #!/bin/sh
+    set -eu
+    
+    printf "%s\n" "Testing the usage of the dependencies"
+
+    rm -rf scryer_libs && rm -f manifest-lock.pl
+
+    scryer-prolog -f pkg.pl -g "catch(pkg_install(_), _, halt(1)),halt"
+
+    scryer-prolog main.pl -g "catch(main, _, halt(1)) ."
+
+    rm -rf scryer_libs && rm -f manifest-lock.pl
+

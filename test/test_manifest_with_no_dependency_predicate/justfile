@@ -1,0 +1,8 @@
+test:
+    #!/bin/sh
+    printf "%s\n" "Testing the installation of a git branch dependency"
+    set -eu
+    
+    rm -rf scryer_libs && rm -f manifest-lock.pl
+    scryer-prolog main.pl -g "catch(main, _, halt(1)) ."
+    rm -rf scryer_libs && rm -f manifest-lock.pl
