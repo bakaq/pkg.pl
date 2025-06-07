@@ -5,7 +5,7 @@ clean:
     rm --recursive --force scryer_libs
 
 install:
-    scryer-prolog -f pkg.pl -g pkg_install,halt
+    scryer-prolog -f pkg.pl -g "catch(pkg_install(_), _, halt(1)),halt"
 
 test: clean install
     scryer-prolog -f main.pl -g "catch(main, _, halt(1)),halt"

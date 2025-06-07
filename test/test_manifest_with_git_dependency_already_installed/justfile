@@ -1,0 +1,39 @@
+test:
+    #!/bin/sh
+
+    set -eu
+    . ../util_packages/report_test.sh
+
+    printf "%s\n" "Testing the installation of a git dependency already installed"
+    
+    rm -rf scryer_libs && rm -f manifest-lock.pl
+    scryer-prolog main.pl -g "catch(main, _, halt(1)) ."
+
+    exitCode=0
+
+    if [ ! -d "./scryer_libs/packages/test" ]; then
+        exitCode=1
+        print_test_result "the package folder exist in the dependencies" failure
+    else
+        print_test_result "the package folder exist in the dependencies" success
+    fi
+
+    if [ ! -f "./scryer_libs/packages/test/scryer-manifest.pl" ]; then
+        exitCode=1
+        print_test_result "the manifest of the dependency exist" failure
+    else
+        print_test_result "the manifest of the dependency exist" success
+    fi
+
+    dependencyBranch=$(cd ./scryer_libs/packages/test && git rev-parse --abbrev-ref HEAD)
+
+    if [ "$dependencyBranch" != "main" ]; then
+        exitCode=1
+        print_test_result "the dependency is at the correct git branch" failure
+    else
+        print_test_result "the dependency is at the correct git branch" success
+    fi
+
+    rm -rf scryer_libs && rm -f manifest-lock.pl
+
+    exit ${exitCode}

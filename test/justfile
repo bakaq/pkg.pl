@@ -1,0 +1,24 @@
+default:
+    @just --list
+
+build:
+    rm -rf util_packages/scryer_libs
+    cd util_packages && scryer-prolog -f pkg.pl -g "catch(pkg_install(_), _, halt(1)), halt"
+
+test:
+    #!/bin/sh
+    set -eu
+
+    exit_code=0
+
+    for dir in test*/; do
+        if (cd "$dir" && just test); then
+            printf "%s\n" "Test in $dir passed"
+        else
+            printf "%s\n" "Test in $dir FAILED"
+            exit_code=1
+        fi
+    done
+
+    exit "$exit_code"
+    

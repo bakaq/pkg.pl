@@ -29,6 +29,8 @@
             buildInputs = with pkgs; [
               git
               just
+              util-linux
+              shellcheck
             ] ++ [
               (scryer-prolog.packages.${system}.default.overrideAttrs (
                 final: prev: {
