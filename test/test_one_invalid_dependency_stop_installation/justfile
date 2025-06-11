@@ -1,0 +1,13 @@
+test:
+    #!/bin/sh
+    set -eu
+    
+    . ../util_packages/report_test.sh
+
+    printf "%s\n" "Testing of one invalid dependency"
+
+    rm -rf scryer_libs && rm -f manifest-lock.pl
+
+    scryer-prolog main.pl -g "catch(main, _, halt(1)) ."
+
+    rm -rf scryer_libs && rm -f manifest-lock.pl

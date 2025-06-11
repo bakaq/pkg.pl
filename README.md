@@ -18,20 +18,21 @@ main_file("main.pl").
 % Optional
 dependencies([
     % A git url to clone
-    git("https://github.com/bakaq/testing.pl.git"),
+    dependency("testing", git("https://github.com/bakaq/testing.pl.git")),
     % A git url to clone at a specific branch
-    git("https://github.com/constraintAutomaton/test-prolog-package-manager.git", branch("branch")),
+    dependency("test_branch", git("https://github.com/constraintAutomaton/test-prolog-package-manager.git", branch("branch"))),
     % A git url to clone at a tag
-    git("https://github.com/constraintAutomaton/test-prolog-package-manager.git", tag("tag")),
+    dependency("test_tag", git("https://github.com/constraintAutomaton/test-prolog-package-manager.git", tag("tag"))),
     % A git url to clone at a specific commit hash
-    git("https://github.com/constraintAutomaton/test-prolog-package-manager.git", hash("d19fefc1d7907f6675e181601bb9b8b94561b441")),
+    dependency("test_hash", git("https://github.com/constraintAutomaton/test-prolog-package-manager.git", hash("d19fefc1d7907f6675e181601bb9b8b94561b441"))),
     % A path to a local package
-    path("./local_package")
+    dependency("test_local", path("./local_package"))
 ]).
+
 ```
 
 Copy the `pkg.pl` file into your project. It is both the dependency manager and
-the package loader. Use `scryer-prolog pkg.pl -g pkg_install,halt.` to download
+the package loader. Use `scryer-prolog pkg.pl -g "pkg_install(X),halt."` to download
 the dependencies to a `scryer_libs` directory (it doesn't handle transitive
 dependencies yet). You can then import packages in your code as follows:
 
